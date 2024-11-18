@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Efficient Exercises</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4a90e2, #f06);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
+    }
+    header {
+      text-align: center;
+      margin: 20px 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .slider-container {
+      display: flex;
+      overflow-x: scroll;
+      gap: 20px;
+      width: 90%;
+      padding: 20px 0;
+      scroll-snap-type: x mandatory;
+      margin-bottom: 20px;
+    }
+    .exercise {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      scroll-snap-align: center;
+      min-width: 300px;
+      transition: transform 0.3s, background 0.3s;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .exercise:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .exercise video {
+      width: 100%;
+      height: 250px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    .slider-container::-webkit-scrollbar {
+      display: none;
+    }
+    .instructions {
+      padding: 20px;
+      width: 90%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Efficient Exercises</h1>
+  </header>
+
+  <div class="slider-container" id="exerciseContainer">
+    <!-- Dynamic Exercise Videos will be injected here -->
+  </div>
+
+  <div class="instructions" id="instructionContainer">
+    <h2>Instructions</h2>
+    <ul id="instructionList">
+      <!-- Dynamic Instructions will be injected here -->
+    </ul>
+  </div>
+
+  <script>
+    // Retrieve the selected activity from localStorage
+    const selectedActivity = localStorage.getItem('activityName') || 'default';
+
+    // Define videos and instructions for each activity
+    const exerciseData = {
+      'Grinding by Hand': {
+        exercises: [
+          { video: '/static/videos/superman_pushup.mp4', description: 'Superman Pushups (Full Core, Shoulders)' },
+          { video: '/static/videos/Vrikshasana.mp4', description: 'Vrikshasana (Tree Pose for Core Stability)' }
+        ],
+        instructions: [
+          'Perform Superman Pushups to engage core and shoulders, targeting functional strength.',
+          'Vrikshasana improves balance and enhances core stability.',
+          'Complete 3 sets of each exercise, holding yoga poses for 30 seconds per leg.',
+          'Take 1-minute rest between sets.',
+          'Hydrate well and focus on controlled movements.'
+        ]
+      },
+      'Washing Clothes by Hand': {
+        exercises: [
+          { video: '/static/videos/plank_rows.mp4', description: 'Plank Rows (Back, Core, and Arms)' },
+          { video: '/static/videos/warrior_pose.mp4', description: 'Virabhadrasana (Warrior Pose for Endurance)' }
+        ],
+        instructions: [
+          'Perform Plank Rows to target back, arms, and core.',
+          'Practice Warrior Pose to stretch and strengthen your legs, core, and shoulders.',
+          'Do 3 sets with 8-12 reps for dynamic exercises and hold yoga poses for 30 seconds each side.',
+          'Rest for 45 seconds between sets.',
+          'Focus on proper alignment and breathe deeply during yoga poses.'
+        ]
+      },
+      'Fetching Water': {
+        exercises: [
+          { video: '/static/videos/farmers_walk.mp4', description: 'Farmer’s Walk (Full Body Strength)' },
+          { video: '/static/videos/chair_pose.mp4', description: 'Utkatasana (Chair Pose for Legs and Core)' }
+        ],
+        instructions: [
+          'Farmer’s Walk improves full-body coordination and strength.',
+          'Chair Pose builds endurance and balance in the lower body.',
+          'Perform Farmer’s Walk for 60 seconds and hold Chair Pose for 30 seconds per set.',
+          'Complete 3 sets with 1-minute rest in between.',
+          'Ensure even weight distribution and controlled breathing.'
+        ]
+      },
+      'Weaving': {
+        exercises: [
+          { video: '/static/videos/hand_grip.mp4', description: 'Hand Gripping Exercises (Forearms)' },
+          { video: '/static/videos/eagle_pose.mp4', description: 'Garudasana (Eagle Pose for Dexterity)' }
+        ],
+        instructions: [
+          'Hand Gripping Exercises strengthen your forearms and improve endurance.',
+          'Eagle Pose enhances coordination and stretches shoulders and arms.',
+          'Hold the Eagle Pose for 30 seconds on each side and repeat grip exercises for 12-15 reps.',
+          'Complete 3 sets with 30 seconds rest.',
+          'Focus on fluid motion and avoid overexertion.'
+        ]
+      },
+      'Pounding Paddy Traditional Method': {
+        exercises: [
+          { video: '/static/videos/medicine_ball_slams.mp4', description: 'Medicine Ball Slams (Shoulders, Core)' },
+          { video: '/static/videos/cobra_pose.mp4', description: 'Bhujangasana (Cobra Pose for Spine and Core)' }
+        ],
+        instructions: [
+          'Medicine Ball Slams improve explosive power and shoulder endurance.',
+          'Cobra Pose stretches the spine and strengthens the lower back.',
+          'Perform 8-10 slams per set and hold Cobra Pose for 20-30 seconds.',
+          'Do 3 sets, resting for 1 minute in between.',
+          'Engage your core during ball slams and maintain smooth breathing.'
+        ]
+      },
+      'default': {
+        exercises: [
+          { video: '/static/videos/bodyweightsquats.mp4', description: 'Bodyweight Squats (Legs, Core)' },
+          { video: '/static/videos/child_pose.mp4', description: 'Balasana (Child’s Pose for Relaxation)' }
+        ],
+        instructions: [
+          'Bodyweight Squats target your legs and core.',
+          'Child’s Pose provides relaxation and stretches your back.',
+          'Do 3 sets of squats with 10-12 reps and hold Child’s Pose for 30 seconds.',
+          'Rest for 1 minute between sets.',
+          'Warm up before starting and ensure proper squat form.'
+        ]
+      }
+    };
+
+    // Get the relevant data for the selected activity
+    const activityData = exerciseData[selectedActivity] || exerciseData['default'];
+
+    // Populate exercises
+    const exerciseContainer = document.getElementById('exerciseContainer');
+    activityData.exercises.forEach(exercise => {
+      const exerciseDiv = document.createElement('div');
+      exerciseDiv.classList.add('exercise');
+      exerciseDiv.innerHTML = `
+        <video src="${exercise.video}" controls></video>
+        <p>${exercise.description}</p>
+      `;
+      exerciseContainer.appendChild(exerciseDiv);
+    });
+
+    // Populate instructions
+    const instructionList = document.getElementById('instructionList');
+    activityData.instructions.forEach(instruction => {
+      const li = document.createElement('li');
+      li.textContent = instruction;
+      instructionList.appendChild(li);
+    });
+  </script>
+</body>
+</html>

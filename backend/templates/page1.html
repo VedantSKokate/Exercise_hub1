@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ancient Women's Activities</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f06, #4a90e2);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-top: 0;
+    }
+
+    .scroll-wrapper {
+      width: 100vw;
+      overflow-x: auto;
+      white-space: nowrap;
+      scroll-behavior: smooth;
+    }
+
+    .block {
+      display: inline-block;
+      vertical-align: top;
+      width: 23%;
+      margin: 0 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .activity {
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .activity:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .label {
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Explore Ancient Daily Activities</h1>
+    <p>Discover how these activities targeted specific muscle groups, now replaced by machines.</p>
+  </header>
+
+  <!-- Scrollable Horizontal Grid Layout -->
+  <div class="scroll-wrapper">
+    <!-- Column 1 -->
+    <div class="block">
+      <div class="label">Before</div>
+      <div class="activity" onclick="selectActivity('Grinding by Hand', '/static/videos/grinding_by_hand.mp4', 'grinding')">
+        <div class="video-wrapper">
+          <video src="/static/videos/grinding_by_hand.mp4" controls></video>
+        </div>
+        <p>Grinding by Hand</p>
+      </div>
+      <div class="label">Nowadays</div>
+      <div class="activity">
+        <div class="video-wrapper">
+          <video src="/static/videos/mixer.mp4" controls></video>
+        </div>
+        <p>Grinding Using Electric Grinder</p>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="block">
+      <div class="label">Before</div>
+      <div class="activity" onclick="selectActivity('Washing Clothes by Hand', '/static/videos/washing_clothes.mp4', 'washing')">
+        <div class="video-wrapper">
+          <video src="/static/videos/washing_clothes.mp4" controls></video>
+        </div>
+        <p>Washing Clothes by Hand</p>
+      </div>
+      <div class="label">Nowadays</div>
+      <div class="activity">
+        <div class="video-wrapper">
+          <video src="/static/videos/washing_machine.mp4" controls></video>
+        </div>
+        <p>Washing Using Machine</p>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="block">
+      <div class="label">Before</div>
+      <div class="activity" onclick="selectActivity('Fetching Water', '/static/videos/hand_fetching.mp4', 'fetching')">
+        <div class="video-wrapper">
+          <video src="/static/videos/hand_fetching.mp4" controls></video>
+        </div>
+        <p>Fetching Water</p>
+      </div>
+      <div class="label">Nowadays</div>
+      <div class="activity">
+        <div class="video-wrapper">
+          <video src="/static/videos/motor_fetching.mp4" controls></video>
+        </div>
+        <p>Fetching Water Using Pump</p>
+      </div>
+    </div>
+
+    <!-- Column 4 -->
+    <div class="block">
+      <div class="label">Before</div>
+      <div class="activity" onclick="selectActivity('Weaving', '/static/videos/weaving_by_hands.mp4', 'weaving')">
+        <div class="video-wrapper">
+          <video src="/static/videos/weaving_by_hands.mp4" controls></video>
+        </div>
+        <p>Weaving</p>
+      </div>
+      <div class="label">Nowadays</div>
+      <div class="activity">
+        <div class="video-wrapper">
+          <video src="/static/videos/weaving_machine.mp4" controls></video>
+        </div>
+        <p>Weaving Using Machines</p>
+      </div>
+    </div>
+
+    <!-- Column 5 -->
+    <div class="block">
+      <div class="label">Before</div>
+      <div class="activity" onclick="selectActivity('Pounding Paddy Traditional Method', '/static/videos/pph.mp4','pounding')">
+        <div class="video-wrapper">
+          <video src="/static/videos/pph.mp4" controls></video>
+        </div>
+        <p>Pounding Paddy Traditional Method</p>
+      </div>
+      <div class="label">Nowadays</div>
+      <div class="activity">
+        <div class="video-wrapper">
+          <video src="/static/videos/ppm.mp4" controls></video>
+        </div>
+        <p>Pounding Paddy Machine</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function selectActivity(activity, videoUrl, column) {
+      const pageMap = {
+        grinding: '/page2?exercise_name=Grinding&video1_url=/static/videos/grinding_by_hand.mp4&video2_url=/static/videos/mixer.mp4',
+        washing: '/page2?exercise_name=Washing&video1_url=/static/videos/washing_clothes.mp4&video2_url=/static/videos/washing_machine.mp4',
+        fetching: '/page2?exercise_name=Fetching&video1_url=/static/videos/hand_fetching.mp4&video2_url=/static/videos/motor_fetching.mp4',
+        weaving: '/page2?exercise_name=Weaving&video1_url=/static/videos/weaving_by_hands.mp4&video2_url=/static/videos/weaving_machine.mp4',
+        pounding: '/page2?exercise_name=Pounding&video1_url=/static/videos/PoundingPaddy_by_hands.mp4&video2_url=/static/videos/poundingPaddy_machine.mp4',
+      };
+
+      const redirectUrl = pageMap[column];
+      if (redirectUrl) {
+        localStorage.setItem('activityName', activity);
+        localStorage.setItem('videoUrl', videoUrl);
+        window.location.href = redirectUrl;
+      } else {
+        console.error('Invalid column or activity type.');
+      }
+    }
+  </script>
+</body>
+</html>

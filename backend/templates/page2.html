@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity Details</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4a90e2, #f06);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .row video {
+      width: 45%;
+      border-radius: 10px;
+      background: #000; /* Fallback color for loading state */
+    }
+    .details {
+      width: 45%;
+      text-align: left;
+    }
+    .details h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .details ul {
+      list-style: disc;
+      margin-left: 20px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+    button {
+      background-color: #fff;
+      color: #4a90e2;
+      padding: 15px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #4a90e2;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="activityName">Activity: Loading...</h1>
+  </header>
+  <div class="container">
+    <!-- First Row: Before -->
+    <div class="row">
+      <video id="videoBefore" controls>
+        <source id="videoSourceBefore" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="details">
+        <h2 id="titleBefore">Muscles Targeted</h2>
+        <ul id="musclesBefore">
+          <li>Loading...</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Second Row: After -->
+    <div class="row">
+      <video id="videoAfter" controls>
+        <source id="videoSourceAfter" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="details">
+        <h2 id="titleAfter">Muscles Targeted</h2>
+        <ul id="musclesAfter">
+          <li>None</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Button for Gym Exercises -->
+    <div class="btn-container">
+      <button onclick="redirectToPage(3)">Exercises in Gym We Do</button>
+    </div>
+  </div>
+
+  <script>
+    const activityName = localStorage.getItem('activityName');
+    const videoUrlBefore = localStorage.getItem('videoUrl'); 
+    const videoUrlAfterMap = {
+      'Grinding by Hand': '/static/videos/mixer.mp4',
+      'Washing Clothes by Hand': '/static/videos/washing_machine.mp4',
+      'Fetching Water': '/static/videos/motor_fetching.mp4',
+      'Weaving': '/static/videos/weaving_machine.mp4',
+      'Pounding Paddy Traditional Method': '/static/videos/ppm.mp4', // Correct file path
+    };
+
+    const videoUrlAfter = videoUrlAfterMap[activityName] || '/static/videos/fallback_after.mp4';
+
+    if (activityName) {
+      document.getElementById('activityName').textContent = `Activity: ${activityName}`;
+      document.getElementById('videoSourceBefore').src = videoUrlBefore || '/static/videos/fallback_before.mp4';
+      document.getElementById('videoSourceAfter').src = videoUrlAfter;
+
+      document.getElementById('videoBefore').load();
+      document.getElementById('videoAfter').load();
+
+      const musclesBefore = document.getElementById('musclesBefore');
+      const titleBefore = document.getElementById('titleBefore');
+      const titleAfter = document.getElementById('titleAfter');
+
+      const activityDetails = {
+        'Grinding by Hand': {
+          before: 'Grinding by Hand',
+          muscles: ['Chest', 'Shoulders', 'Core', 'Triceps', 'Forearms'],
+          after: 'Grinding Using Electric Grinder',
+        },
+        'Washing Clothes by Hand': {
+          before: 'Washing Clothes by Hand',
+          muscles: ['Back', 'Arms', 'Core', 'Shoulders', 'Legs'],
+          after: 'Washing Using Machine',
+        },
+        'Fetching Water': {
+          before: 'Fetching Water',
+          muscles: ['Legs', 'Arms', 'Back', 'Shoulders', 'Core'],
+          after: 'Fetching Water Using Pump',
+        },
+        'Weaving': {
+          before: 'Weaving',
+          muscles: ['Arms', 'Fingers', 'Shoulders', 'Core', 'Back'],
+          after: 'Weaving Using Machines',
+        },
+        'Pounding Paddy Traditional Method': {
+          before: 'Pounding Paddy Traditional Method',
+          muscles: ['Shoulders', 'Arms', 'Core', 'Chest', 'Back'],
+          after: 'Pounding Paddy Machine',
+        },
+      };
+
+      const details = activityDetails[activityName] || {
+        before: 'Unknown',
+        muscles: ['Data not available'],
+        after: 'Unknown',
+      };
+
+      titleBefore.textContent = `Muscles Targeted (${details.before})`;
+      musclesBefore.innerHTML = details.muscles.map(muscle => `<li>${muscle}</li>`).join('');
+      titleAfter.textContent = `Muscles Targeted (${details.after})`;
+    } else {
+      alert('No activity selected. Redirecting to Page 1.');
+      window.location.href = 'page1.html';
+    }
+
+    function redirectToPage(page) {
+      window.location.href = `/page${page}`;
+    }
+  </script>
+</body>
+</html>
